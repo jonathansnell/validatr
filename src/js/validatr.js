@@ -785,6 +785,19 @@
                 message: ''
             };
 
+        if ($element.prop('disabled')) {
+            check.disabled = true;
+        } else {
+            $element.parentsUntil('form', 'fieldset').each(function() {
+                var $this = $(this);
+                check.disabled = $this.prop('disabled') && ($element.closest($this.children('label:first-of-type')).length == 0);
+            });
+        }
+        if (check.disabled) {
+            $element.trigger('valid');
+            return true;
+        }
+
         if (Support.inputtypes[type]) {
             check.valid = element.validity.valid;
             check.message = element.validationMessage;
